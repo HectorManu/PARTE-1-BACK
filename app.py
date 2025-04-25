@@ -2,13 +2,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 from werkzeug.utils import secure_filename
-from aws_ocr_service import process_image_with_textract
+from ocr_service import process_image  # Cambiado a usar ocr_service en lugar de aws_ocr_service
 
 app = Flask(__name__)
 CORS(app)  # Habilitar CORS para todas las rutas
 
 # Configuraciones
-UPLOAD_FOLDER = '/tmp/uploads'
+UPLOAD_FOLDER = 'uploads'  # Directorio local para desarrollo
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'tiff', 'pdf'}
 
 if not os.path.exists(UPLOAD_FOLDER):
@@ -39,8 +39,8 @@ def upload_ocr():
         file.save(filepath)
         
         try:
-            # Procesar la imagen con AWS Textract
-            result = process_image_with_textract(filepath)
+            # Procesar la imagen con OCR usando Tesseract
+            result = process_image(filepath)  # Usando la función de ocr_service.py
             
             # Verificar si se extrajo texto
             if not result or not result.strip():
@@ -67,4 +67,4 @@ def too_large(e):
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True, host='0.0.0.0', port=port)
