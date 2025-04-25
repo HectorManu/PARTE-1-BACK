@@ -16,19 +16,12 @@ Este proyecto es una aplicación web para procesar imágenes de recibos utilizan
 ## Estructura del Proyecto
 
 ```
-ocr-receipts/
-├── frontend/                # Aplicación React
-│   ├── src/
-│   │   ├── App.tsx          # Componente principal
-│   │   ├── App.css          # Estilos CSS
-│   │   ├── index.tsx        # Punto de entrada
-│   │   └── index.css        # Estilos globales
-│   └── package.json         # Dependencias del frontend
+
 ├── backend/
-│   ├── app.py               # API Flask
-│   ├── ocr_service.py       # Servicio OCR con Tesseract
-│   └── requirements.txt     # Dependencias del backend
-└── Dockerfile               # Configuración para Docker
+   ├── app.py               # API Flask
+   ├── ocr_service.py       # Servicio OCR con Tesseract
+   ├── requirements.txt     # Dependencias del backen
+   └── Dockerfile               # Configuración para Docker
 ```
 
 ## Instalación y Ejecución
@@ -68,6 +61,8 @@ ocr-receipts/
    El servidor estará disponible en http://localhost:5000
 
 #### Frontend (React)
+
+[Clona el repositorio aquí](https://github.com/HectorManu/PARTE-1)
 
 1. Instalar dependencias:
    ```bash
