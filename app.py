@@ -25,13 +25,13 @@ def allowed_file(filename):
 def upload_ocr():
     # Verificar si la petición contiene un archivo
     if 'file' not in request.files:
-        return jsonify({"error": "No se encontró ningún archivo"}), 400
+        return jsonify({"success": False, "error": "No se encontró ningún archivo"}), 400
     
     file = request.files['file']
     
     # Si el usuario no selecciona un archivo
     if file.filename == '':
-        return jsonify({"error": "No se seleccionó ningún archivo"}), 400
+        return jsonify({"success": False, "error": "No se seleccionó ningún archivo"}), 400
     
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -40,26 +40,27 @@ def upload_ocr():
         
         try:
             # Procesar la imagen con OCR usando Tesseract
-            result = process_image(filepath)  # Usando la función de ocr_service.py
+            result = process_image(filepath)
             
             # Verificar si se extrajo texto
             if not result or not result.strip():
                 return jsonify({
-                    "error": "No se pudo extraer texto de la imagen",
-                    "text": ""
-                }), 422
+                    "success": True,
+                    "text": "",
+                    "message": "No se detectó texto en la imagen"
+                })
             
-            return jsonify({"text": result})
+            return jsonify({"success": True, "text": result})
             
         except Exception as e:
-            return jsonify({"error": f"Error al procesar la imagen: {str(e)}"}), 500
+            return jsonify({"success": False, "error": f"Error al procesar la imagen: {str(e)}"}), 500
         finally:
             # Limpiar el archivo después de procesarlo
             if os.path.exists(filepath):
                 os.remove(filepath)
     else:
-        return jsonify({"error": "Tipo de archivo no permitido"}), 400
-
+        return jsonify({"success": False, "error": "Tipo de archivo no permitido"}), 400
+    
 # Manejo de error para archivos muy grandes
 @app.errorhandler(413)
 def too_large(e):
